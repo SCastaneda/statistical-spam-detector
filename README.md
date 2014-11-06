@@ -6,6 +6,7 @@ Spam Archives: [here's one](http://untroubled.org/spam/ "spam archive from untro
 We need to find Non-Spam archive(s).
 
 We've split the work into 2 parts:
+
 1. Parser/Tokenizer:
   - will be used for the training data and on the test data
 2. Classifier
