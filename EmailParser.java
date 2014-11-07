@@ -17,7 +17,7 @@ public class EmailParser {
 
     // take in a single file with many emails
     // split up emails and call parseSingleEmail
-    // return the result, in case it is wanted for something else
+    // return the combined token frequency
     public static HashMap<String, Integer> parseEmailsAndSave(String fileName) {
         HashMap<String, Integer> tokenFreq = new HashMap<String, Integer>();
 
