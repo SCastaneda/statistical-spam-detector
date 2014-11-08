@@ -25,4 +25,24 @@ public class EmailParser {
         return tokenFreq;
     }
 
+    public static void saveHashMap(int spam, int nonspam, HashMap<String, Integer> tokenFreq){
+        PrintWriter out = new PrintWriter(new FileWriter("hashMap.txt"))); 
+        out.println(spam + " " + nonspam); 
+
+
+        //Iterate over hashmap
+        Iterator it = tokenFreq.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+
+            //print token then frequency
+            out.println(pairs.getKey() + " " + pairs.getValue());
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+
+        out.flush(); 
+        out.close();
+        return;
+    }
+
 }
