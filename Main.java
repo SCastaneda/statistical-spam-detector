@@ -31,10 +31,17 @@ public class Main {
 		}
 		*/
 		
-		String html = "<html> lolo </html>";
-		HtmlFilter hf = new HtmlFilter();
-		html = hf.filter(str);
-		System.out.println(html);
+		// String html = "<html> lolo </html>";
+		// HtmlFilter hf = new HtmlFilter();
+		// html = hf.filter(str);
+		// System.out.println(html);
+
+
+		// String html = "abc <a xyz asd=\"test\" href=\"http://www.test.com/abc/def\"> this is my test link </a> hi";
+		// String html = "abc <a xyz asd=\"test\" href=\"http://www.test.com/abc/def> asd";
+		// LinkFilter lf = new LinkFilter();
+		// html = lf.filter(html);
+		// System.out.println(html);
 	}
 
 }
