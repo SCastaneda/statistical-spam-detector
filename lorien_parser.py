@@ -1,6 +1,7 @@
 import sys
 from os import walk
 from email.parser import Parser
+from email.Message import Message
 import base64
 
 # base64.b64decode(str)
@@ -41,6 +42,17 @@ def handleSingleFile(filepath, appendTo):
     ourFormat += "\n::BODY::\n"
 
     body = parsed.get_payload()
+
+    if isinstance(body, list):
+        bodytext = ""
+        for text in body:
+            if isinstance(text, basestring) or isinstance(text, str):
+                bodytext += text
+            elif isinstance(text, Message):
+                bodytext += text.as_string()
+            else:
+                bodytext += `text`
+        body = bodytext
 
     # check if we need to decode the body from base 64
     if 'Content-Transfer-Encoding' in parsed and parsed['Content-Transfer-Encoding'].lower == 'base64':
