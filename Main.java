@@ -1,47 +1,103 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.*;
 import java.util.*;
 
 public class Main {
 
-	public static void main(String[] args) {
-		
-		HashMap<String,Integer> tokenFreq = new HashMap<String,Integer>();
-		String str = "";
-		// Open file and read all into str
-		try{
-			//str = new String(Files.readAllBytes(Paths.get("C:/workspace-java/SPAM/2000/03/952012137.23264.txt")));
-			str = new String(Files.readAllBytes(Paths.get("test.html")));
-		}catch(IOException e){
-			System.err.println(e.getMessage());
-		}
-		
-		/*
-		// Parse the file
-		SimpleParser parser = new SimpleParser();
-		str = parser.filter(str);
-		
-		// Count tokens and add count into tokenFreq
-		TokenCounter.count(tokenFreq, str);
-		
-		// Print results
-		for(String s : tokenFreq.keySet()){
-			System.out.println(s + " - " + tokenFreq.get(s));
-		}
-		*/
-		
-		// String html = "<html> lolo </html>";
-		// HtmlFilter hf = new HtmlFilter();
-		// html = hf.filter(str);
-		// System.out.println(html);
+    String spamFile     = "spam.txt";
+    String nonSpamFile  = "nonspam.txt";
+    String trainingFile = "training.txt";
 
+    public static void main(String[] args) {
+        
+        HashMap<String, Pair> tokenFreq = new HashMap();
 
-		// String html = "abc <a xyz asd=\"test\" href=\"http://www.test.com/abc/def\"> this is my test link </a> hi";
-		// String html = "abc <a xyz asd=\"test\" href=\"http://www.test.com/abc/def> asd";
-		// LinkFilter lf = new LinkFilter();
-		// html = lf.filter(html);
-		// System.out.println(html);
-	}
+        //open spam file, go through each email
+        try {
+            BufferedReader spamBr = new BufferedReader(new FileReader(spamFile));
+            // go through entire File, and update the tokenFreq
+            // set spam flag to true
+            totalFreq = updateByFile(totalFreq, spamBr, true);
+
+            BufferedReader nonSpamBr = new BufferedReader(new FileReader(nonSpamFile));
+            // go through entire File, and update the tokenFreq
+            // set spam flag to false
+            totalFreq = updateByFile(totalFreq, nonSpamBr, false);
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            spamBr.close();
+            nonSpamBr.close();
+        }
+
+        // print tokenFreq to File
+        // need to get total spam/non-spam emails count and print that to the file as well
+        
+
+    }
+
+    public static String getNextEmail(BufferedReader br) {
+        StringBuffer email = new StringBuffer(1024);
+        String nextLine = br.readLine();
+
+        while( nextLine != null && !nextLine.contains("::New Email::") ) {
+            email.append(nextLine);
+            nextLine = br.readLine();
+        }
+
+        return email.toString();
+
+    }
+
+    public static HashMap<String, Pair> addToTotalfreq(HashMap<String, Pair> totalFreq, HashMap<String, Integer> thisFreq, boolean spam) {
+        for(String key : thisFreq.keySet()) {
+
+            // found the current token! add to it
+            if(totalFreq.containsKey(key)) {
+                if(spam) {
+                    totalFreq.get(key).setSpamCount( totalFreq.get(key).getSpamCount() + thisFreq.get(key) );
+                } else {
+                    totalFreq.get(key).setNonSpamCount( totalFreq.get(key).getNonSpamCount() + thisFreq.get(key) );
+                }
+            } else {
+                Pair pair;
+                if(spam) {
+                    pair = new Pair(thisFreq.get(key), 0);
+
+                } else {
+                    pair = new Pair(0, thisFreq.get(key));
+                }
+
+                totalFreq.set(key, pair);
+            }
+        }
+
+        return totalFreq;
+    }
+
+    public static HashMap<String, Pair> updateByFile(HashMap<String, Pair> totalFreq, BufferedReader br, boolean spam) {
+        // the very first line should be ::New Email::
+        String firstLine = br.readLine();
+        if( !firstLine.contains("::New Email::") ) {
+            System.out.printf("\n\nincorrect format: file's first line should be ::New Email::");
+            System.exit(0);
+        }
+
+        // get next email
+        String email = getNextEmail(br);
+        while (email != null) {
+            // run email through filters
+            SimpleParser parser = new SimpleParser();
+            String[] emailArr = parser.filter(email);
+
+            // Count tokens and add count into tokenFreq
+            totalFreq = addToTotalfreq(totalFreq, TokenCounter.count(emailArr[0], emailArr[1]), spam);  
+
+            email = getNextEmail(br);
+        }
+
+        return totalFreq;
+    }
 
 }
+

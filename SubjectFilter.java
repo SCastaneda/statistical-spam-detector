@@ -3,14 +3,14 @@ public class SubjectFilter implements Filter{
 
 	@Override
 	public String filter(String str) {
-		String marker = "Subject: ";
+		String marker = "::Subject::\n";
 		
 		int sindex = str.indexOf(marker);
 		sindex += marker.length();
 		
 		// Search for newline
 		int endindex = sindex;
-		while(str.charAt(endindex)!= 10){
+		while(str.charAt(endindex) != '\n'){
 			endindex++;
 		}
 		
