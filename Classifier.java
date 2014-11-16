@@ -27,7 +27,7 @@ public class Classifier {
 		
 		Scanner input = null;
 		try {
-			input = new Scanner(new File("filename"));
+			input = new Scanner(new File("training.txt"));
 		} catch (FileNotFoundException e) {
 			System.out.println("Could not open filename");
 		}
@@ -37,8 +37,9 @@ public class Classifier {
 		ngood = input.nextInt();
 		
 		// calculate token probabilities.
-		tokenProb = new HashMap<String,Double>;
-		for(int i = 0; 0 < tokens.size(); i++){
+		tokenProb = new HashMap<String,Double>();
+		//for(int i = 0; 0 < tokens.size(); i++){
+		while(input.hasNext()){
 			String token = input.next();
 			double b = input.nextInt();
 			double g = 2*(input.nextInt());
@@ -47,13 +48,13 @@ public class Classifier {
 			if(b+g < 5){
 				prob = defaultTokenProb;
 			}else{
-				prob = min(1.0,b/nbad) / ( min(1.0, g/ngood) + min(1.0, b/nbad) );
+				prob = Math.min(1.0,b/nbad) / ( Math.min(1.0, g/ngood) + Math.min(1.0, b/nbad) );
 				if (prob < 0.1) prob = 0.1;
 				if (prob > 0.99) prob = 0.99;
 			}
-			
-			tokenProb.add(token,prob);
+			tokenProb.put(token,prob);
 		}
+		
 	}
 	
 	/**
@@ -61,15 +62,18 @@ public class Classifier {
 	 * email as spam (TRUE) or not spam (FALSE).
 	 */
 	public int classify(String email){
+	/*
 		// Use parser to counts words on email.
 		HashMap<String,Integer> tokenFreq = EmailParser.parseSingleEmail(email);
-		Scanner input = null;
-		try {
-			input = new Scanner(new File("filename"));
-		} catch (FileNotFoundException e) {
-			System.out.println("Could not open filename");
-		}
-		input.useDelimiter(" ");
+		
+		
+		// Scanner input = null;
+		// try {
+			// input = new Scanner(new File("filename"));
+		// } catch (FileNotFoundException e) {
+			// System.out.println("Could not open filename");
+		// }
+		// input.useDelimiter(" ");
 		
 		// Find most interesting tokens.
 		Champion champ = new Champion(15);
@@ -100,6 +104,7 @@ public class Classifier {
 		if (overallProb > spamProbLimit){
 			return 1;
 		}
+		*/
 		return 0;
 	}
 	
