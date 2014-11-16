@@ -1,5 +1,7 @@
 import java.util.*;
 import java.io.*;
+import java.nio.*;
+import java.nio.file.*;
 
 /**
  * This class is in charge of classifying emails as spam or not spam.
@@ -24,7 +26,7 @@ public class Classifier {
 	}
 	
 	private void calculateTokenProbabilities(){
-		
+		/*
 		Scanner input = null;
 		try {
 			input = new Scanner(new File("training.txt"));
@@ -32,39 +34,82 @@ public class Classifier {
 			System.out.println("Could not open filename");
 		}
 		input.useDelimiter(" ");
+		*/
+		BufferedReader input;
+		try{
+			input = new BufferedReader(new FileReader("training.txt"));
 		
-		nbad = input.nextInt();
-		ngood = input.nextInt();
 		
-		// calculate token probabilities.
-		tokenProb = new HashMap<String,Double>();
-		//for(int i = 0; 0 < tokens.size(); i++){
-		while(input.hasNext()){
-			String token = input.next();
-			double b = input.nextInt();
-			double g = 2*(input.nextInt());
+			String line = input.readLine();
+			String[] toks = line.split("\\s");
 			
-			double prob;
-			if(b+g < 5){
-				prob = defaultTokenProb;
-			}else{
-				prob = Math.min(1.0,b/nbad) / ( Math.min(1.0, g/ngood) + Math.min(1.0, b/nbad) );
-				if (prob < 0.1) prob = 0.1;
-				if (prob > 0.99) prob = 0.99;
+			nbad = Integer.parseInt(toks[0]);
+			//System.out.println("nbad=" + nbad);
+			ngood =  Integer.parseInt(toks[1]);
+			//System.out.println("ngood=" + ngood);
+			
+			// calculate token probabilities.
+			tokenProb = new HashMap<String,Double>();
+			//for(int i = 0; 0 < tokens.size(); i++){
+			line = input.readLine();
+			while(line != null && line.length() > 0){
+				toks = line.split("\\s");
+				String token = toks[0];
+				//System.out.println("token=" + token);
+				double b = Integer.parseInt(toks[1]);
+				//System.out.println("b=" + b);
+				double g = 2*(Integer.parseInt(toks[2]));
+				//System.out.println("g=" + g);
+				
+				double prob;
+				if(b+g < 5){
+					prob = defaultTokenProb;
+				}else{
+					prob = Math.min(1.0,b/nbad) / ( Math.min(1.0, g/ngood) + Math.min(1.0, b/nbad) );
+					if (prob < 0.1) prob = 0.1;
+					if (prob > 0.99) prob = 0.99;
+					tokenProb.put(token,prob);
+				}
+				line = input.readLine();
 			}
-			tokenProb.put(token,prob);
+			input.close();
+		}catch (Exception e) {e.printStackTrace();}
+	}
+	
+	public HashMap<String,Integer> parse(String email){
+		SimpleParser sp = new SimpleParser();
+		String[] tokens = sp.filter(email);
+		HashMap<String,Integer> tokenFreq = new HashMap<String,Integer>();
+		// Count tokens in subject
+		String[] token = tokens[0].split("\\s");
+		for(String s : token){
+			if(tokenFreq.containsKey(s)){
+				tokenFreq.put(s,tokenFreq.get(s)+1);
+			}else{
+				tokenFreq.put(s,1);
+			}
+		}
+		// Count tokens in body
+		token = tokens[1].split("\\s");
+		for(String s : token){
+			if(tokenFreq.containsKey(s)){
+				tokenFreq.put(s,tokenFreq.get(s)+1);
+			}else{
+				tokenFreq.put(s,1);
+			}
 		}
 		
+		return tokenFreq;
 	}
 	
 	/**
 	 * Given a raw email string, this function classify such
-	 * email as spam (TRUE) or not spam (FALSE).
+	 * email as spam (1) or not spam (0).
 	 */
 	public int classify(String email){
-	/*
+	
 		// Use parser to counts words on email.
-		HashMap<String,Integer> tokenFreq = EmailParser.parseSingleEmail(email);
+		HashMap<String,Integer> tokenFreq = parse(email);
 		
 		
 		// Scanner input = null;
@@ -90,6 +135,11 @@ public class Classifier {
 			champ.testContestant(token, prob);
 		}
 		
+		// Print most interesting tokens
+		for(int i =0; i < champ.size(); i++){
+			System.out.println(champ.getChampion(i) + " " + champ.getChampionValue(i) + " " + tokenProb.get(champ.getChampion(i)) );
+		}
+		
 		// Calculate overall probability
 		double cprob = 0.5;
 		double prod = 1; 
@@ -99,13 +149,32 @@ public class Classifier {
 			invProd *= (1-champ.getChampionValue(i));
 		}
 		double overallProb = prod / (prod + invProd);
+		System.out.println("SPAM PROB=" + overallProb);
 		
 		// Classify email as spam or not spam.
 		if (overallProb > spamProbLimit){
 			return 1;
 		}
-		*/
 		return 0;
+	}
+	
+	
+	public static void main(String[] args){
+		Classifier classifier = new Classifier();
+		String mail = "";
+		try{
+			mail = new String(Files.readAllBytes(Paths.get("mail.txt")));
+		} catch (Exception e){e.printStackTrace();}
+		
+		//System.out.println(mail);
+		
+		if (classifier.classify(mail) == 1 ){
+			System.out.println("SPAM");
+		}else{
+			System.out.println("NO SPAM");
+		}
+		
+		
 	}
 	
 	private int ngood, nbad;
