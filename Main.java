@@ -8,8 +8,31 @@ public class Main {
     static String trainingFile = "training.txt";
     static String commonWords  = "common.txt";
 
+    static String STATE = "train"; // default state is to train
+
     public static void main(String[] args) {
         
+        String[] words = parseArgs(args);
+
+        if(STATE == "train") {
+            runTrainingState();
+        } else if(STATE == "test") {
+            runTestingState();
+        } else if(STATE == "words") {
+            runWordsState();
+        }
+
+    }
+
+    public static void runTestingState() {
+
+    }
+
+    public static void runWordsState() {
+
+    }
+
+    public static void runTrainingState() {
         HashMap<String, Pair> tokenFreq = new HashMap();
 
         BufferedReader spamBr = null;
@@ -51,7 +74,6 @@ public class Main {
         // print tokenFreq to File
         // total spam/non-spam emails count is in tokenFreq with key ::email count::
         writeTrainingFile(tokenFreq, trainingFile);
-
     }
 
     public static void writeTrainingFile(HashMap<String, Pair> tokenFreq, String trainingFile) {
@@ -159,6 +181,37 @@ public class Main {
         totalFreq = addToTotalfreq(totalFreq, emailCount, spam);
 
         return totalFreq;
+    }
+
+    public static String[] parseArgs(String[] args) {
+
+        String[] words = null;
+
+        if(args[0].compareTo("train") == 0 ) {
+            STATE = "train";
+        } else if(args[0].compareTo("test") == 0 ) {
+            STATE = "test";
+        } else if(args[0].compareTo("words") == 0 ) {
+            STATE = "words";
+        } else {
+            printHelpAndExit();
+        }
+
+        return words;
+
+    }
+
+    public static void printHelpAndExit() {
+        System.out.printf("Usage:\n");
+        System.out.printf("\tjava Main [option] [args]\n");
+        System.out.printf("\t\toptions\n");
+        System.out.printf("\t\t\ttrain\twill run the training cycle and output to training.txt (default)\n");
+        System.out.printf("\t\t\t\trequires a spam.txt and nonspam.txt file\n");
+        System.out.printf("\t\t\ttest\twill run the test cycle. Requires a training.txt file\n");
+        System.out.printf("\t\t\twords\twill take in additional [args], and return probability of them being spam\n");
+
+        System.exit(0);
+
     }
 
 }
