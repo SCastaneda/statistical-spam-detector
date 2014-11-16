@@ -12,10 +12,11 @@ public class HtmlFilter implements Filter{
 				ignore = true;
 			}else if(str.charAt(i) == '>'){
 				ignore = false;
-				i++;
-				if(str.charAt(i) == '<'){
-					ignore = true;
-				}
+				continue;
+				//i++;
+				//if(str.charAt(i) == '<'){
+				//	ignore = true;
+				//}
 			}
 			
 			if(!ignore && i < str.length()){

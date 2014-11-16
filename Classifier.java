@@ -79,10 +79,13 @@ public class Classifier {
 	public HashMap<String,Integer> parse(String email){
 		SimpleParser sp = new SimpleParser();
 		String[] tokens = sp.filter(email);
-		HashMap<String,Integer> tokenFreq = new HashMap<String,Integer>();
+		//HashMap<String,Integer> tokenFreq = new HashMap<String,Integer>();
+		return TokenCounter.count(tokens[0],tokens[1]);
+		/*
 		// Count tokens in subject
 		String[] token = tokens[0].split("\\s");
 		for(String s : token){
+			s = s.toLowerCase();
 			if(tokenFreq.containsKey(s)){
 				tokenFreq.put(s,tokenFreq.get(s)+1);
 			}else{
@@ -99,7 +102,7 @@ public class Classifier {
 			}
 		}
 		
-		return tokenFreq;
+		return tokenFreq;*/
 	}
 	
 	/**
@@ -121,7 +124,7 @@ public class Classifier {
 		// input.useDelimiter(" ");
 		
 		// Find most interesting tokens.
-		Champion champ = new Champion(15);
+		Champion champ = new Champion(30);
 		for (String token : tokenFreq.keySet()){
 			// Find probability for this token
 			double prob = 0.0;
@@ -156,6 +159,14 @@ public class Classifier {
 			return 1;
 		}
 		return 0;
+	}
+	
+	public double getSpamProb(String word){
+		if(tokenProb.containsKey(word)){
+			return tokenProb.get(word);
+		}else{
+			return defaultTokenProb;
+		}
 	}
 	
 	
