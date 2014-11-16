@@ -2,7 +2,7 @@
 public class BodyFilter implements Filter {
 	@Override
 	public String filter(String str) {
-		String marker = "::Body::\n"
+		String marker = "::body::\n";
 		
 		int sindex = str.indexOf(marker);
 		

@@ -5,18 +5,29 @@ public class TokenCounter {
 	public static HashMap<String,Integer> count( String subject, String body){
 
 		HashMap<String,Integer> tokenFreq = new HashMap();
-		String[] tokens = str.split("\\s");
+		String[] stokens = subject.split("\\s");
+		String[] btokens = body.split("\\s");
 		
-		for(String s : subject){
-			if(s.length()>0){
+		for(String s : stokens){
+			if(s.length()>1){
 				s = "subject*" + s;
-				tokenFreq.put(s, tokenFreq.get(s)+1);
+				s = s.toLowerCase();
+				if(tokenFreq.containsKey(s)){
+					tokenFreq.put(s, tokenFreq.get(s)+1);
+				} else {
+					tokenFreq.put(s,1);
+				}
 			}
 		}
 
-		for(String s : body){
-			if(s.length()>0){
-				tokenFreq.put(s, tokenFreq.get(s)+1);
+		for(String s : btokens){
+			if(s.length()>1){
+				s = s.toLowerCase();
+				if(tokenFreq.containsKey(s)){
+					tokenFreq.put(s, tokenFreq.get(s)+1);
+				} else {
+					tokenFreq.put(s,1);
+				}
 			}
 		}
 

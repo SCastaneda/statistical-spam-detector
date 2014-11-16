@@ -1,7 +1,6 @@
 
-public class SimpleParser implements Filter{
+public class SimpleParser {
 
-    @Override
     public String[] filter(String str) {
         
         SubjectFilter sf  = new SubjectFilter();

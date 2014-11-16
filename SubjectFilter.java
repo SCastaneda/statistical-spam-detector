@@ -3,8 +3,8 @@ public class SubjectFilter implements Filter{
 
 	@Override
 	public String filter(String str) {
-		String marker = "::Subject::\n";
-		
+		String marker = "::subject::";
+
 		int sindex = str.indexOf(marker);
 		sindex += marker.length();
 		

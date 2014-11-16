@@ -6,7 +6,7 @@ public class Pair {
 
     public Pair() {
         freqSpam = 0;
-        freqNotSpam = 0;
+        freqNonSpam = 0;
     }
 
     public Pair(int initSpam, int initNonSpam) {
