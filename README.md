@@ -1,6 +1,11 @@
 statistical-spam-detector
 =========================
 
+Run with more memory:
+```
+java -Xmx2048M -Xms2048M Main train
+```
+
 Spam Archives: [here's one](http://untroubled.org/spam/ "spam archive from untroubled.org"), [here's another](http://www.dornbos.com/spam01.shtml "spam archive from dornbos.com")
 
 We need to find Non-Spam archive(s).

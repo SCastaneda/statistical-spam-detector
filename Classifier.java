@@ -26,15 +26,7 @@ public class Classifier {
 	}
 	
 	private void calculateTokenProbabilities(){
-		/*
-		Scanner input = null;
-		try {
-			input = new Scanner(new File("training.txt"));
-		} catch (FileNotFoundException e) {
-			System.out.println("Could not open filename");
-		}
-		input.useDelimiter(" ");
-		*/
+
 		BufferedReader input;
 		try{
 			input = new BufferedReader(new FileReader("training.txt"));
@@ -79,30 +71,7 @@ public class Classifier {
 	public HashMap<String,Integer> parse(String email){
 		SimpleParser sp = new SimpleParser();
 		String[] tokens = sp.filter(email);
-		//HashMap<String,Integer> tokenFreq = new HashMap<String,Integer>();
 		return TokenCounter.count(tokens[0],tokens[1]);
-		/*
-		// Count tokens in subject
-		String[] token = tokens[0].split("\\s");
-		for(String s : token){
-			s = s.toLowerCase();
-			if(tokenFreq.containsKey(s)){
-				tokenFreq.put(s,tokenFreq.get(s)+1);
-			}else{
-				tokenFreq.put(s,1);
-			}
-		}
-		// Count tokens in body
-		token = tokens[1].split("\\s");
-		for(String s : token){
-			if(tokenFreq.containsKey(s)){
-				tokenFreq.put(s,tokenFreq.get(s)+1);
-			}else{
-				tokenFreq.put(s,1);
-			}
-		}
-		
-		return tokenFreq;*/
 	}
 	
 	/**
@@ -114,17 +83,8 @@ public class Classifier {
 		// Use parser to counts words on email.
 		HashMap<String,Integer> tokenFreq = parse(email);
 		
-		
-		// Scanner input = null;
-		// try {
-			// input = new Scanner(new File("filename"));
-		// } catch (FileNotFoundException e) {
-			// System.out.println("Could not open filename");
-		// }
-		// input.useDelimiter(" ");
-		
 		// Find most interesting tokens.
-		Champion champ = new Champion(30);
+		Champion champ = new Champion(15);
 		for (String token : tokenFreq.keySet()){
 			// Find probability for this token
 			double prob = 0.0;
@@ -142,9 +102,10 @@ public class Classifier {
 		for(int i =0; i < champ.size(); i++){
 			System.out.println(champ.getChampion(i) + " " + champ.getChampionValue(i) + " " + tokenProb.get(champ.getChampion(i)) );
 		}
+
+		System.out.printf("\n");
 		
 		// Calculate overall probability
-		double cprob = 0.5;
 		double prod = 1; 
 		double invProd = 1;
 		for(int i =0; i < champ.size(); i++){
@@ -153,6 +114,8 @@ public class Classifier {
 		}
 		double overallProb = prod / (prod + invProd);
 		System.out.println("SPAM PROB=" + overallProb);
+
+		System.out.printf("\n\n");
 		
 		// Classify email as spam or not spam.
 		if (overallProb > spamProbLimit){
@@ -167,25 +130,6 @@ public class Classifier {
 		}else{
 			return defaultTokenProb;
 		}
-	}
-	
-	
-	public static void main(String[] args){
-		Classifier classifier = new Classifier();
-		String mail = "";
-		try{
-			mail = new String(Files.readAllBytes(Paths.get("mail.txt")));
-		} catch (Exception e){e.printStackTrace();}
-		
-		//System.out.println(mail);
-		
-		if (classifier.classify(mail) == 1 ){
-			System.out.println("SPAM");
-		}else{
-			System.out.println("NO SPAM");
-		}
-		
-		
 	}
 	
 	private int ngood, nbad;

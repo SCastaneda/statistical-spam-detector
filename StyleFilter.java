@@ -35,7 +35,8 @@ public class StyleFilter implements Filter{
 				i = str.length();
 			}else{
 				//Append anything before the opening tag
-				result.append(str.substring(i, begin) + " ");
+				result.append(str.substring(i, begin));
+				result.append(" ");
 				
 				//Look for closing tag
 				int end = indexOf(str,styleTagClose, begin);

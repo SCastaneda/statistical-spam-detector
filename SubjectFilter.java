@@ -6,7 +6,7 @@ public class SubjectFilter implements Filter{
 		String marker = "::subject::";
 
 		int sindex = str.indexOf(marker);
-		sindex += marker.length();
+		sindex += marker.length()+1;
 		
 		// Search for newline
 		int endindex = sindex;

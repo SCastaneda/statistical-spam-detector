@@ -12,6 +12,7 @@ public class TokenCounter {
 			if(s.length()>1){
 				s = "subject*" + s;
 				s = s.toLowerCase();
+
 				if(tokenFreq.containsKey(s)){
 					tokenFreq.put(s, tokenFreq.get(s)+1);
 				} else {
@@ -23,6 +24,7 @@ public class TokenCounter {
 		for(String s : btokens){
 			if(s.length()>1){
 				s = s.toLowerCase();
+
 				if(tokenFreq.containsKey(s)){
 					tokenFreq.put(s, tokenFreq.get(s)+1);
 				} else {

@@ -4,18 +4,26 @@ public class CharFilter implements Filter{
 	@Override
 	public String filter(String str) {
 		
-		StringBuffer result = new StringBuffer("");
+		//StringBuffer result = new StringBuffer("");
 		
 		//String[] tokens = bodyStr.split("[^a-zA-Z\\d]");
 		//String[] tokens = bodyStr.split("\\s");
-		String[] tokens = str.split("[^\\p{Alnum}]");
-		for(String s : tokens){
-			if(s.length() > 0){
-				result.append( s + " " );
-			}
-		}
+		//str = str.replaceAll("[^\\p{Alnum}]", " ");
+		// for(String s : tokens){
+		// 	if(s.length() > 0){
+		// 		result.append( s + " " );
+		// 	}
+		// }
+
+		// for(int i = 0; i < str.length(); i++){
+		// 	if(str.charAt(i) ){
+		// 		result.append(str.charAt(i));
+		// 	}else{
+		// 		result.append(' ');
+		// 	}
+		// }
 		
-		return result.toString();
+		return str.replaceAll("[^\\p{Alnum}]", " ");
 	}
 
 }

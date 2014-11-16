@@ -8,6 +8,9 @@ public class Main {
     static String trainingFile = "training.txt";
     static String commonWords  = "common.txt";
 
+    static String testSpamFile    = "test_spam.txt";
+    static String testNonSpamFile = "test_nonspam.txt";
+
     static String STATE = "train"; // default state is to train
 
     public static void main(String[] args) {
@@ -25,7 +28,51 @@ public class Main {
     }
 
     public static void runTestingState() {
+        Classifier classifier = new Classifier();
+        
+        BufferedReader testSpamBr = null;
+        BufferedReader testNonSpamBr = null;
+        String mail = "";
 
+        try{
+            testSpamBr = new BufferedReader(new FileReader(testSpamFile));
+            testNonSpamBr = new BufferedReader(new FileReader(testNonSpamFile));
+
+            int total = 0;
+            int correct = 0;
+
+            // start spam
+            mail = getNextEmail(testSpamBr);
+            while(mail != null) {
+
+                correct += classifier.classify(mail);
+                total++;
+
+                mail = getNextEmail(testSpamBr);               
+            }
+            System.out.println("\n\nTotal=" + total + " Spam=" + correct + "\n\n");
+
+
+            // start nonSpam
+            mail = getNextEmail(testNonSpamBr);
+            total = 0; correct = 0;
+            while(mail != null) {
+
+                correct += 1-classifier.classify(mail);
+                total++;
+
+                mail = getNextEmail(testNonSpamBr);                
+            }
+            System.out.println("\n\nTotal=" + total + " Spam=" + correct + "\n\n");
+
+            System.out.println("Accuracy: " + ((double)correct/total));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        //System.out.println(mail);
+        
     }
 
     public static void runWordsState(String[] words) {
@@ -42,6 +89,7 @@ public class Main {
         BufferedReader nonSpamBr = null;
         
         //open spam file, go through each email
+        int total = 0;
         try {
             spamBr = new BufferedReader(new FileReader(spamFile));
             // go through entire File, and update the tokenFreq
@@ -159,7 +207,7 @@ public class Main {
         // the very first line should be ::New Email::
         String firstLine = br.readLine();
         if( !firstLine.contains("::new email::") ) {
-            System.out.printf("incorrect format: file's first line should be ::New Email::\n");
+            System.out.printf("incorrect format: file's first line should be ::new email::\n");
             System.exit(0);
         }
 
@@ -177,6 +225,11 @@ public class Main {
 
             email = getNextEmail(br);
             count++;
+
+            if(count % 1000 == 0) {
+                System.out.println(count);
+                System.gc();
+            }
         }
 
         HashMap<String, Integer> emailCount = new HashMap();
