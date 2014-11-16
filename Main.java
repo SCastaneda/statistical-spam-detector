@@ -19,7 +19,7 @@ public class Main {
         } else if(STATE == "test") {
             runTestingState();
         } else if(STATE == "words") {
-            runWordsState();
+            runWordsState(words);
         }
 
     }
@@ -28,8 +28,11 @@ public class Main {
 
     }
 
-    public static void runWordsState() {
-
+    public static void runWordsState(String[] words) {
+        Classifier cl = new Classifier();
+        for(int i = 0; i < words.length; i++) {
+            System.out.println(words[i] + ": " + cl.getSpamProb(words[i]));
+        }
     }
 
     public static void runTrainingState() {
@@ -193,6 +196,13 @@ public class Main {
             STATE = "test";
         } else if(args[0].compareTo("words") == 0 ) {
             STATE = "words";
+
+            words = new String[args.length -1];
+
+            for(int i = 1; i < args.length; i++) {
+                words[i-1] = args[i];
+            }
+
         } else {
             printHelpAndExit();
         }
