@@ -143,7 +143,7 @@ public class Classifier {
 	 * Emails with a combined probability higher than
 	 * spamProbLimit will be classified as spam.
 	 */
-	private double spamProbLimit = 0.9;
+	private double spamProbLimit = 0.8;
 	
 	/**
 	 * Contains the calculated probability of being spam
