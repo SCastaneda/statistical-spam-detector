@@ -99,11 +99,11 @@ public class Classifier {
 		}
 		
 		// Print most interesting tokens
-		for(int i =0; i < champ.size(); i++){
-			System.out.println(champ.getChampion(i) + " " + champ.getChampionValue(i) + " " + tokenProb.get(champ.getChampion(i)) );
-		}
+		// for(int i =0; i < champ.size(); i++){
+		// 	System.out.println(champ.getChampion(i) + " " + champ.getChampionValue(i) + " " + tokenProb.get(champ.getChampion(i)) );
+		// }
 
-		System.out.printf("\n");
+		// System.out.printf("\n");
 		
 		// Calculate overall probability
 		double prod = 1; 
@@ -113,9 +113,9 @@ public class Classifier {
 			invProd *= (1-champ.getChampionValue(i));
 		}
 		double overallProb = prod / (prod + invProd);
-		System.out.println("SPAM PROB=" + overallProb);
+		// System.out.println("SPAM PROB=" + overallProb);
 
-		System.out.printf("\n\n");
+		// System.out.printf("\n\n");
 		
 		// Classify email as spam or not spam.
 		if (overallProb > spamProbLimit){

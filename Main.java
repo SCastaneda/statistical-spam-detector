@@ -50,12 +50,12 @@ public class Main {
 
                 mail = getNextEmail(testSpamBr);               
             }
-            System.out.println("\n\nTotal=" + total + " Spam=" + correct + "\n\n");
+            // System.out.println("\n\nTotal=" + total + " Spam=" + correct + "\n\n");
 
 
             // start nonSpam
             mail = getNextEmail(testNonSpamBr);
-            total = 0; correct = 0;
+            // total = 0; correct = 0;
             while(mail != null) {
 
                 correct += 1-classifier.classify(mail);
@@ -63,7 +63,7 @@ public class Main {
 
                 mail = getNextEmail(testNonSpamBr);                
             }
-            System.out.println("\n\nTotal=" + total + " Spam=" + correct + "\n\n");
+            // System.out.println("\n\nTotal=" + total + " Spam=" + correct + "\n\n");
 
             System.out.println("Accuracy: " + ((double)correct/total));
 
