@@ -4,7 +4,7 @@ public class HtmlFilter implements Filter{
 	@Override
 	public String filter(String str) {
 		
-		String result = "";
+		StringBuffer result = new StringBuffer("");
 		//String[] tokens = str.split("<.*>");
 		boolean ignore = false;
 		for(int i = 0;i < str.length(); i++){
@@ -19,11 +19,11 @@ public class HtmlFilter implements Filter{
 			}
 			
 			if(!ignore && i < str.length()){
-				result += str.charAt(i);
+				result.append(str.charAt(i));
 			}
 		}
 		
-		return result;
+		return result.toString();
 	}
 
 }

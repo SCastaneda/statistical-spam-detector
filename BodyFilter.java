@@ -2,14 +2,10 @@
 public class BodyFilter implements Filter {
 	@Override
 	public String filter(String str) {
+		String marker = "::body::\n";
 		
-		int si = 0;
+		int sindex = str.indexOf(marker);
 		
-		while (str.charAt(si) != 10 || str.charAt(si+1) != 10){
-			si++;
-		}
-		si += 2;
-		
-		return str.substring(si, str.length());
+		return str.substring(sindex, str.length());
 	}
 }
