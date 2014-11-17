@@ -12,7 +12,8 @@ java Main [option] [args]
   options
 			train	will run the training cycle and output to training.txt (default)
 				    requires a spam.txt and nonspam.txt file
-			test	will run the test cycle. Requires a training.txt file
+			test	will run the test cycle. Requires a training.txt file,
+				a test_spam.txt file, and a test_nonspam.txt file
 			words	will take in additional [args], and return probability of them being spam
 ```
 
