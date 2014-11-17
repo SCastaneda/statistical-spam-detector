@@ -1,9 +1,19 @@
 statistical-spam-detector
 =========================
 
-Run with more memory:
+Run training with more memory:
 ```
 java -Xmx2048M -Xms2048M Main train
+```
+
+Usage:
+```
+java Main [option] [args]
+  options
+			train	will run the training cycle and output to training.txt (default)
+				    requires a spam.txt and nonspam.txt file
+			test	will run the test cycle. Requires a training.txt file
+			words	will take in additional [args], and return probability of them being spam
 ```
 
 Spam Archives: [here's one](http://untroubled.org/spam/ "spam archive from untroubled.org"), [here's another](http://www.dornbos.com/spam01.shtml "spam archive from dornbos.com")
