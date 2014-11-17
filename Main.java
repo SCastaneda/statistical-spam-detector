@@ -251,6 +251,10 @@ public class Main {
 
         String[] words = null;
 
+        if(args.length < 1) {
+            printHelpAndExit();
+        }
+
         if(args[0].compareTo("train") == 0 ) {
             STATE = "train";
         } else if(args[0].compareTo("test") == 0 ) {
